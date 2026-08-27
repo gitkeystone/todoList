@@ -25,5 +25,6 @@
 ## Testing 测试
 帮我根据 REST Client 撰写一个 test.rest 文件，里面包含对所有支持的 API 的测试。
 
+## pre-commit & github action
 
-
+为项目配置 pre-commit 和 GitHub Actions CI
