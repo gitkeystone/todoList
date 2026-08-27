@@ -1,0 +1,66 @@
+# ============================================================
+# pre-commit 配置：提交前快速检查（开发者本地门槛）
+# 安装：make hooks-install（或 pre-commit install）
+# 手动全量运行：pre-commit run --all-files
+# 说明：
+#   - 全量 CI（含测试/构建）见 .github/workflows/ci.yml
+#   - language: system 钩子不支持 working_dir，目录切换在 entry 内完成；
+#     PATH 补齐标准 Go 安装位置（/usr/local/go/bin、$HOME/go/bin）
+# ============================================================
+exclude: ^(web/dist|web/node_modules|bin|data)/
+
+repos:
+  # ---- 通用文件检查 ----
+  - repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v5.0.0
+    hooks:
+      - id: trailing-whitespace
+      - id: end-of-file-fixer
+      - id: check-yaml
+      - id: check-json
+        exclude: ^web/tsconfig.*\.json$
+      - id: check-merge-conflict
+      - id: check-added-large-files
+        args: [--maxkb=1024]
+
+  # ---- 项目专属检查（使用本机工具链）----
+  - repo: local
+    hooks:
+      - id: gofmt
+        name: gofmt
+        description: Go 源码格式化检查
+        entry: bash -c 'export PATH="$PATH:/usr/local/go/bin:$HOME/go/bin"; out="$(gofmt -l "$@")"; if [ -n "$out" ]; then echo "gofmt needed:"; echo "$out"; exit 1; fi' --
+        language: system
+        types: [go]
+
+      - id: go-vet
+        name: go vet
+        description: Go 静态检查
+        entry: bash -c 'export PATH="$PATH:/usr/local/go/bin:$HOME/go/bin"; cd server && go vet ./...'
+        language: system
+        files: \.go$
+        pass_filenames: false
+
+      - id: golangci-lint
+        name: golangci-lint
+        description: Go 全量 Lint
+        entry: bash -c 'export PATH="$PATH:/usr/local/go/bin:$HOME/go/bin"; cd server && golangci-lint run ./...'
+        language: system
+        files: \.go$
+        pass_filenames: false
+        require_serial: true
+
+      - id: prettier
+        name: prettier
+        description: 前端代码格式化检查
+        entry: "bash -c 'cd web && pnpm exec prettier --check \"${@/#web\\//}\"' --"
+        language: system
+        files: ^web/.*\.(vue|ts|tsx|js|json|css)$
+
+      - id: eslint
+        name: eslint
+        description: 前端 ESLint 检查
+        entry: "bash -c 'cd web && pnpm exec eslint \"${@/#web\\//}\"' --"
+        language: system
+        files: ^web/.*\.(vue|ts|tsx|js)$
+        require_serial: true

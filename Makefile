@@ -11,7 +11,7 @@ PORT        ?= 8080
 DB_PATH     ?= data/todolist.db
 WEB_DIST    ?= web/dist
 
-.PHONY: help setup dev dev-api dev-web build run test test-web test-api lint fmt seed db-reset clean ci
+.PHONY: help setup dev dev-api dev-web build run test test-web test-api lint fmt seed db-reset clean ci hooks-install hooks-uninstall hooks-run
 
 help:            ## 显示全部目标与说明
 	@awk 'BEGIN {FS = ":.*##"} /^[a-zA-Z_-]+:.*##/ {printf "  %-14s %s\n", $$1, $$2}' $(MAKEFILE_LIST)
@@ -63,6 +63,15 @@ db-reset:        ## 重置数据库（含 WAL/SHM 残留文件，开发用）
 
 ci:              ## 本地 CI：格式/静态检查/测试/构建 全流程
 	bash scripts/ci.sh
+
+hooks-install:   ## 安装 pre-commit 钩子（提交前快速检查）
+	pre-commit install
+
+hooks-uninstall: ## 卸载 pre-commit 钩子
+	pre-commit uninstall
+
+hooks-run:       ## 手动运行全部 pre-commit 检查
+	pre-commit run --all-files
 
 clean:           ## 清理构建产物与数据库（含 WAL/SHM 残留）
 	rm -rf bin web/dist $(DB_PATH) $(DB_PATH)-wal $(DB_PATH)-shm

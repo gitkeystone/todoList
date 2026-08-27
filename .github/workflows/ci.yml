@@ -1,0 +1,84 @@
+# ============================================================
+# GitHub Actions CI
+# 触发：push 到 main / Pull Request
+# 与本地 pre-commit（.pre-commit-config.yaml）互补：
+#   pre-commit = 提交前快速检查；本工作流 = 全量测试 + 构建
+# ============================================================
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  backend:
+    name: Backend (Go + Gin + SQLite)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-go@v5
+        with:
+          go-version: '1.26.x'
+          cache-dependency-path: server/go.sum
+
+      - name: gofmt 检查
+        run: |
+          out="$(gofmt -l server/)"
+          if [ -n "$out" ]; then
+            echo "以下文件需要 gofmt 格式化："
+            echo "$out"
+            exit 1
+          fi
+
+      - name: go vet
+        working-directory: server
+        run: go vet ./...
+
+      - uses: golangci/golangci-lint-action@v6
+        with:
+          version: v1.64
+          working-directory: server
+
+      - name: 单元/集成测试（含覆盖率）
+        working-directory: server
+        run: go test ./... -cover
+
+  frontend:
+    name: Frontend (Vue + TS)
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: web
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 11
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: pnpm
+          cache-dependency-path: web/pnpm-lock.yaml
+
+      - name: 安装依赖
+        run: pnpm install --frozen-lockfile
+
+      - name: Prettier 检查
+        run: pnpm exec prettier --check .
+
+      - name: ESLint
+        run: pnpm lint
+
+      - name: Vitest 单元测试
+        run: pnpm test
+
+      - name: 类型检查与构建（vue-tsc + vite）
+        run: pnpm build

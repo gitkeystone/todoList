@@ -1,5 +1,7 @@
 # Todo List
 
+[![CI](https://github.com/gitkeystone/todoList/actions/workflows/ci.yml/badge.svg)](https://github.com/gitkeystone/todoList/actions/workflows/ci.yml)
+
 一个极简、Apple 风格的**单用户待办事项应用**（无用户系统，本地 SQLite 存储）。
 
 ![](https://cdn.jsdelivr.net/gh/gitkeystone/PicGo@main/img/20260828015747718.png)
