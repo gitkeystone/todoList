@@ -11,7 +11,8 @@
         try {
           var theme = localStorage.getItem('todolist.theme')
           var systemDark = window.matchMedia('(prefers-color-scheme: dark)').matches
-          var dark = theme === 'dark' || (!theme && systemDark) || (theme === 'system' && systemDark)
+          var dark =
+            theme === 'dark' || (!theme && systemDark) || (theme === 'system' && systemDark)
           if (dark) document.documentElement.classList.add('dark')
         } catch (e) {
           /* localStorage 不可用时静默降级 */

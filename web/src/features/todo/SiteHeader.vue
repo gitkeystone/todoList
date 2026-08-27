@@ -50,7 +50,9 @@ function select(next: ThemeMode) {
         <button
           class="theme-toggle"
           type="button"
-          :aria-label="'切换主题，当前：' + (mode === 'system' ? '跟随系统' : isDark ? '深色' : '浅色')"
+          :aria-label="
+            '切换主题，当前：' + (mode === 'system' ? '跟随系统' : isDark ? '深色' : '浅色')
+          "
           :aria-expanded="open"
           @click="open = !open"
         >

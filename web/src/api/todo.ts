@@ -35,11 +35,9 @@ http.interceptors.response.use(
 export { http }
 
 export const todoApi = {
-  list: (params: TodoQuery = {}) =>
-    http.get('/todos', { params }) as Promise<ApiEnvelope<Todo[]>>,
+  list: (params: TodoQuery = {}) => http.get('/todos', { params }) as Promise<ApiEnvelope<Todo[]>>,
 
-  create: (title: string) =>
-    http.post('/todos', { title }) as Promise<ApiEnvelope<Todo>>,
+  create: (title: string) => http.post('/todos', { title }) as Promise<ApiEnvelope<Todo>>,
 
   get: (id: number) => http.get(`/todos/${id}`) as Promise<ApiEnvelope<Todo>>,
 
@@ -48,8 +46,7 @@ export const todoApi = {
 
   remove: (id: number) => http.delete(`/todos/${id}`) as Promise<ApiEnvelope<null>>,
 
-  clearCompleted: () =>
-    http.delete('/todos/completed') as Promise<ApiEnvelope<null>>,
+  clearCompleted: () => http.delete('/todos/completed') as Promise<ApiEnvelope<null>>,
 }
 
 export type { PageMeta }

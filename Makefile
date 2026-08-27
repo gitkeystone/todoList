@@ -11,7 +11,7 @@ PORT        ?= 8080
 DB_PATH     ?= data/todolist.db
 WEB_DIST    ?= web/dist
 
-.PHONY: help setup dev dev-api dev-web build run test test-web test-api lint fmt seed db-reset clean
+.PHONY: help setup dev dev-api dev-web build run test test-web test-api lint fmt seed db-reset clean ci
 
 help:            ## 显示全部目标与说明
 	@awk 'BEGIN {FS = ":.*##"} /^[a-zA-Z_-]+:.*##/ {printf "  %-14s %s\n", $$1, $$2}' $(MAKEFILE_LIST)
@@ -60,6 +60,9 @@ seed:            ## 注入演示数据
 
 db-reset:        ## 重置数据库（开发用）
 	rm -f $(DB_PATH)
+
+ci:              ## 本地 CI：格式/静态检查/测试/构建 全流程
+	bash scripts/ci.sh
 
 clean:           ## 清理构建产物与数据库
 	rm -rf bin web/dist $(DB_PATH)

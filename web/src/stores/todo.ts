@@ -40,11 +40,7 @@ export const useTodoStore = defineStore('todo', {
       const kw = state.keyword.trim().toLowerCase()
       return state.items
         .filter((t) =>
-          state.status === 'all'
-            ? true
-            : state.status === 'completed'
-              ? t.completed
-              : !t.completed,
+          state.status === 'all' ? true : state.status === 'completed' ? t.completed : !t.completed,
         )
         .filter((t) => (kw ? t.title.toLowerCase().includes(kw) : true))
         .sort((a, b) => Date.parse(b.createdAt) - Date.parse(a.createdAt))

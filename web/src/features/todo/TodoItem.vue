@@ -54,11 +54,7 @@ function onKeydown(e: KeyboardEvent) {
 </script>
 
 <template>
-  <li
-    class="todo-item"
-    :class="{ done: todo.completed }"
-    @keydown="onKeydown"
-  >
+  <li class="todo-item" :class="{ done: todo.completed }" @keydown="onKeydown">
     <button
       class="checkbox"
       type="button"

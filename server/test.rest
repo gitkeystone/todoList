@@ -76,3 +76,56 @@ GET {{baseUrl}}/todos/999999
 
 ### TC-15 非法 id（期望 400，code=40004）
 GET {{baseUrl}}/todos/abc
+
+# ============================================================
+# 更新 / 删除（TC-16 ~ TC-23）
+# ============================================================
+
+### TC-16 完成待办（期望 200，completed=true 且 completedAt 非空）
+PATCH {{baseUrl}}/todos/{{createTodo.response.body.$.data.id}}
+Content-Type: application/json
+
+{ "completed": true }
+
+### TC-17 取消完成（期望 200，completedAt 为 null）
+PATCH {{baseUrl}}/todos/{{createTodo.response.body.$.data.id}}
+Content-Type: application/json
+
+{ "completed": false }
+
+### TC-18 修改标题（期望 200，title 更新）
+PATCH {{baseUrl}}/todos/{{createTodo.response.body.$.data.id}}
+Content-Type: application/json
+
+{ "title": "学习 Go 与 GORM" }
+
+### TC-19 更新不存在的待办（期望 404，code=40400）
+PATCH {{baseUrl}}/todos/999999
+Content-Type: application/json
+
+{ "title": "x" }
+
+### TC-20 删除单条（期望 204）
+DELETE {{baseUrl}}/todos/{{createTodo.response.body.$.data.id}}
+
+### TC-21 删除不存在的待办（期望 404，code=40400）
+DELETE {{baseUrl}}/todos/999999
+
+### TC-22a 先造 2 条已完成待办
+PATCH {{baseUrl}}/todos/14
+Content-Type: application/json
+
+{ "completed": true }
+
+### TC-22b 清除已完成（期望 204，此后 completed 总数归零）
+DELETE {{baseUrl}}/todos/completed
+
+### TC-22c 清除已完成幂等（期望仍为 204）
+DELETE {{baseUrl}}/todos/completed
+
+### TC-23 路由优先级：静态路由 /todos/completed 与参数路由 /todos/:id 不冲突
+### （DELETE /todos/completed 走静态路由返回 204；GET /todos/completed 落入 :id 因非法返回 40004）
+DELETE {{baseUrl}}/todos/completed
+
+### TC-23b
+GET {{baseUrl}}/todos/completed

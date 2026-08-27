@@ -14,7 +14,7 @@ type Todo struct {
 	Completed   bool       `gorm:"not null;default:false;index" json:"completed"`
 	CreatedAt   time.Time  `gorm:"index" json:"createdAt"`
 	UpdatedAt   time.Time  `json:"updatedAt"`
-	CompletedAt *time.Time `json:"completedAt,omitempty"`
+	CompletedAt *time.Time `json:"completedAt"`
 }
 
 // Init 执行数据库迁移（幂等，PRD §7.4）。
