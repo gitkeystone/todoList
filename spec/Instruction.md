@@ -11,8 +11,11 @@
 
 ## Implementation plan 实施计划
 
-## Phased implementation 阶段实现
+按照 ./spec/0001-prd-spec.md 文件中的需求和设计文档，生成一个详细的、阶段性的实施计划，放在./spec/0002-implementation-plan.md 文件中，输出为中文。
 
+## Milestone 里程碑
+
+按照 ./spec/0002-implementation-plan.md, 在 ./todoList/ 目录下 完整实现这个项目的 M0 阶段的所有任务。
 
 ## Testing 测试
 帮我根据 REST Client 撰写一个 test.rest 文件，里面包含对所有支持的 API 的测试。
