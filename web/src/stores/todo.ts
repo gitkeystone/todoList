@@ -1,5 +1,5 @@
 import { defineStore } from 'pinia'
-import { toast } from 'sonner'
+import { toast } from 'vue-sonner'
 
 import { ApiError, todoApi } from '@/api/todo'
 import type { FilterStatus, Todo } from '@/types/todo'
