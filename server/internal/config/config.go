@@ -26,6 +26,15 @@ func Load() *Config {
 	}
 }
 
+// DSN 返回 SQLite 连接串（含 PRAGMA，PRD §7.1）。
+func (c *Config) DSN() string {
+	return c.DBPath +
+		"?_pragma=journal_mode(WAL)" +
+		"&_pragma=busy_timeout(5000)" +
+		"&_pragma=foreign_keys(ON)" +
+		"&_pragma=synchronous(NORMAL)"
+}
+
 func getEnv(key, def string) string {
 	if v := os.Getenv(key); v != "" {
 		return v

@@ -24,7 +24,7 @@ dev:             ## 一键启动开发环境（前端 :5173 + 后端 :8080，Ctr
 	$(MAKE) dev-api & $(MAKE) dev-web & wait
 
 dev-api:         ## 启动后端（有 air 则热重载，否则 go run）
-	@command -v air >/dev/null 2>&1 && (cd $(SERVER_DIR) && air --build.cmd "go build -o ../$(BIN) ./cmd/api" --build.bin "../$(BIN)") || (cd $(SERVER_DIR) && go run ./cmd/api)
+	@command -v air >/dev/null 2>&1 && (cd $(SERVER_DIR) && DB_PATH=../$(DB_PATH) air --build.cmd "go build -o ../$(BIN) ./cmd/api" --build.bin "../$(BIN)") || (cd $(SERVER_DIR) && DB_PATH=../$(DB_PATH) go run ./cmd/api)
 
 dev-web:         ## 启动前端（Vite dev server）
 	cd $(WEB_DIR) && pnpm dev
@@ -34,7 +34,7 @@ build:           ## 构建前后端产物
 	cd $(WEB_DIR) && pnpm build
 
 run:             ## 生产模式运行（先 build；后端托管 web/dist）
-	cd $(SERVER_DIR) && GIN_MODE=release ../$(BIN)
+	cd $(SERVER_DIR) && GIN_MODE=release DB_PATH=../$(DB_PATH) ../$(BIN)
 
 test:            ## 后端单元测试（含覆盖率）
 	cd $(SERVER_DIR) && go test ./... -cover
@@ -55,7 +55,7 @@ fmt:             ## 代码格式化（gofmt + Prettier）
 	cd $(WEB_DIR) && pnpm format
 
 seed:            ## 注入演示数据
-	cd $(SERVER_DIR) && go run ./cmd/seed
+	cd $(SERVER_DIR) && DB_PATH=../$(DB_PATH) go run ./cmd/seed
 
 db-reset:        ## 重置数据库（开发用）
 	rm -f $(DB_PATH)

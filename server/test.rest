@@ -1,0 +1,78 @@
+# ============================================================
+# Todo List REST API 测试（REST Client for VS Code）
+# 用法：make dev-api 启动后端后，在本文件内逐条点击 "Send Request"
+# 或用 HttpYac 批量执行：httpyac send test.rest --output short
+# 用例清单对应 PRD §10.3（TC-01 ~ TC-15）
+# ============================================================
+
+@baseUrl = http://localhost:8080/api/v1
+
+### TC-01 健康检查（期望 200）
+GET http://localhost:8080/healthz
+
+### TC-02 创建待办（期望 201，返回 id/title；@name 供后续链式引用）
+# @name createTodo
+POST {{baseUrl}}/todos
+Content-Type: application/json
+
+{ "title": "学习 Go 语言基础" }
+
+### TC-03 创建待办 - 空标题（期望 400，code=40001）
+POST {{baseUrl}}/todos
+Content-Type: application/json
+
+{ "title": "   " }
+
+### TC-04 创建待办 - 超长标题 201 字符（期望 400，code=40001）
+POST {{baseUrl}}/todos
+Content-Type: application/json
+
+{ "title": "长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长" }
+
+### TC-05 创建多条（批量造数，供后续列表断言）
+POST {{baseUrl}}/todos
+Content-Type: application/json
+
+{ "title": "给产品写周报" }
+
+### TC-05b
+POST {{baseUrl}}/todos
+Content-Type: application/json
+
+{ "title": "整理报销单据" }
+
+### TC-05c
+POST {{baseUrl}}/todos
+Content-Type: application/json
+
+{ "title": "复习 GORM 高级用法" }
+
+### TC-06 查询全部（期望 200，total ≥ 5）
+GET {{baseUrl}}/todos
+
+### TC-07 查询进行中（期望 200，全部为未完成）
+GET {{baseUrl}}/todos?status=active
+
+### TC-08 查询已完成（期望 200；可先在 TC-16 完成后查看）
+GET {{baseUrl}}/todos?status=completed
+
+### TC-09 关键词搜索（期望 200，结果含目标项）
+GET {{baseUrl}}/todos?q=Go
+
+### TC-10 分页（期望 200，meta.pageSize=2）
+GET {{baseUrl}}/todos?page=1&pageSize=2
+
+### TC-11 非法分页 page=0（期望 400，code=40002）
+GET {{baseUrl}}/todos?page=0
+
+### TC-12 非法排序（期望 400，code=40003）
+GET {{baseUrl}}/todos?sort=foo:desc
+
+### TC-13 查询单个（链式引用 TC-02 返回的 id，期望 200）
+GET {{baseUrl}}/todos/{{createTodo.response.body.$.data.id}}
+
+### TC-14 查询不存在（期望 404，code=40400）
+GET {{baseUrl}}/todos/999999
+
+### TC-15 非法 id（期望 400，code=40004）
+GET {{baseUrl}}/todos/abc
