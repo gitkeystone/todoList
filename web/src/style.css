@@ -106,9 +106,22 @@ body {
     'PingFang SC', 'Helvetica Neue', 'Microsoft YaHei', sans-serif;
   -webkit-font-smoothing: antialiased;
   text-rendering: optimizeLegibility;
+  -webkit-tap-highlight-color: transparent;
   transition:
     background-color 0.3s ease,
     color 0.3s ease;
+}
+
+/* 尊重系统"减少动态效果"：禁用位移类动画，保留必要淡入（PRD §4.2.4） */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
 }
 
 ::selection {

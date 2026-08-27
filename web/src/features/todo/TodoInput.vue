@@ -49,6 +49,11 @@ async function shake() {
   await nextTick()
   shaking.value = true
 }
+
+/** 供外部（⌘K 快捷键）聚焦输入框 */
+defineExpose({
+  focus: () => inputEl.value?.focus(),
+})
 </script>
 
 <template>

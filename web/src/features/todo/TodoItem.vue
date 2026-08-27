@@ -43,10 +43,22 @@ async function onDelete() {
     /* 错误已由 store 统一 toast */
   }
 }
+
+/** 键盘操作：焦点在条目内时 Delete/Backspace 删除（PRD §4.4 I-7） */
+function onKeydown(e: KeyboardEvent) {
+  if (e.key === 'Delete' || e.key === 'Backspace') {
+    e.preventDefault()
+    void onDelete()
+  }
+}
 </script>
 
 <template>
-  <li class="todo-item" :class="{ done: todo.completed }">
+  <li
+    class="todo-item"
+    :class="{ done: todo.completed }"
+    @keydown="onKeydown"
+  >
     <button
       class="checkbox"
       type="button"
@@ -87,6 +99,7 @@ async function onDelete() {
 
 /* 圆形勾选框（Apple 式） */
 .checkbox {
+  position: relative;
   width: 24px;
   height: 24px;
   flex-shrink: 0;
@@ -102,6 +115,14 @@ async function onDelete() {
     background-color 0.2s ease,
     border-color 0.2s ease,
     transform 0.1s ease;
+}
+
+/* 触屏点击目标 ≥ 44px（PRD §4.6） */
+.checkbox::after {
+  content: '';
+  position: absolute;
+  inset: -12px;
+  border-radius: 9999px;
 }
 
 .checkbox:hover {
@@ -156,6 +177,7 @@ async function onDelete() {
 }
 
 .delete {
+  position: relative;
   width: 30px;
   height: 30px;
   flex-shrink: 0;
@@ -173,6 +195,14 @@ async function onDelete() {
     opacity 0.15s ease,
     background-color 0.15s ease,
     color 0.15s ease;
+}
+
+/* 触屏点击目标 ≥ 44px */
+.delete::after {
+  content: '';
+  position: absolute;
+  inset: -7px;
+  border-radius: 9999px;
 }
 
 .todo-item:hover .delete,

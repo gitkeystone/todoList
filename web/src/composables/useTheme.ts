@@ -1,45 +1,60 @@
 import { computed, onMounted, onUnmounted, ref } from 'vue'
 
-type ThemeMode = 'light' | 'dark'
+/** 主题模式：显式浅色 / 显式深色 / 跟随系统（PRD FR-09 三态） */
+export type ThemeMode = 'light' | 'dark' | 'system'
 
 const STORAGE_KEY = 'todolist.theme'
 
-/** 读取持久化主题；未设置时跟随系统 */
-function resolveInitial(): ThemeMode {
+function readStored(): ThemeMode {
   const stored = localStorage.getItem(STORAGE_KEY)
-  if (stored === 'light' || stored === 'dark') return stored
-  return window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light'
+  if (stored === 'light' || stored === 'dark' || stored === 'system') return stored
+  return 'system'
 }
 
-function apply(mode: ThemeMode) {
-  document.documentElement.classList.toggle('dark', mode === 'dark')
+function systemPrefersDark(): boolean {
+  return window.matchMedia('(prefers-color-scheme: dark)').matches
+}
+
+/** 解析生效主题（跟随系统时取系统偏好） */
+function resolve(mode: ThemeMode): 'light' | 'dark' {
+  if (mode === 'system') return systemPrefersDark() ? 'dark' : 'light'
+  return mode
+}
+
+function apply(resolved: 'light' | 'dark') {
+  document.documentElement.classList.toggle('dark', resolved === 'dark')
 }
 
 /**
  * 深浅色主题 composable（PRD FR-09）
- * 初始值来自 index.html 的防 FOUC 脚本；未手动设置时跟随系统变化。
+ * 初始 class 由 index.html 防 FOUC 脚本预置；本 composable 负责三态切换与系统监听。
  */
 export function useTheme() {
-  const mode = ref<ThemeMode>(resolveInitial())
-  const isDark = computed(() => mode.value === 'dark')
+  const mode = ref<ThemeMode>(readStored())
+  const resolved = ref<'light' | 'dark'>(resolve(mode.value))
+  const isDark = computed(() => resolved.value === 'dark')
   const mql = window.matchMedia('(prefers-color-scheme: dark)')
 
-  function toggle() {
-    mode.value = mode.value === 'dark' ? 'light' : 'dark'
-    localStorage.setItem(STORAGE_KEY, mode.value)
-    apply(mode.value)
+  function setMode(next: ThemeMode) {
+    mode.value = next
+    localStorage.setItem(STORAGE_KEY, next)
+    resolved.value = resolve(next)
+    apply(resolved.value)
   }
 
   function onSystemChange(e: MediaQueryListEvent) {
-    // 用户未手动选择过主题时才跟随系统
-    if (!localStorage.getItem(STORAGE_KEY)) apply(e.matches ? 'dark' : 'light')
+    // 仅"跟随系统"模式响应系统变化
+    if (mode.value === 'system') {
+      resolved.value = e.matches ? 'dark' : 'light'
+      apply(resolved.value)
+    }
   }
 
   onMounted(() => {
-    apply(mode.value)
+    apply(resolved.value)
     mql.addEventListener('change', onSystemChange)
   })
   onUnmounted(() => mql.removeEventListener('change', onSystemChange))
 
-  return { isDark, toggle }
+  return { mode, isDark, setMode }
 }

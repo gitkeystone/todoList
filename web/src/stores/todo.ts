@@ -14,6 +14,8 @@ interface TodoState {
   loading: boolean
   clearing: boolean
   loaded: boolean
+  /** 列表加载错误信息（用于错误态 + 重试，PRD §4.5） */
+  error: string | null
 }
 
 function notifyError(e: unknown) {
@@ -29,6 +31,7 @@ export const useTodoStore = defineStore('todo', {
     loading: false,
     clearing: false,
     loaded: false,
+    error: null,
   }),
 
   getters: {
@@ -54,11 +57,13 @@ export const useTodoStore = defineStore('todo', {
   actions: {
     async fetchList() {
       this.loading = true
+      this.error = null
       try {
         const res = await todoApi.list({ status: 'all', page: 1, pageSize: PAGE_SIZE })
         this.items = res.data
         this.loaded = true
       } catch (e) {
+        this.error = e instanceof ApiError ? e.message : '加载失败，请稍后重试'
         notifyError(e)
       } finally {
         this.loading = false
@@ -103,12 +108,13 @@ export const useTodoStore = defineStore('todo', {
       }
     },
 
-    /** 删除：乐观移除，失败恢复原位 */
+    /** 删除：乐观移除，失败恢复原位；成功轻提示（PRD §4.4 I-4） */
     async remove(id: number) {
       const idx = this.items.findIndex((t) => t.id === id)
       const [removed] = this.items.splice(idx, 1)
       try {
         await todoApi.remove(id)
+        toast.success('已删除')
       } catch (e) {
         if (removed) this.items.splice(Math.min(idx, this.items.length), 0, removed)
         notifyError(e)
@@ -120,7 +126,9 @@ export const useTodoStore = defineStore('todo', {
       this.clearing = true
       try {
         await todoApi.clearCompleted()
+        const count = this.completedCount
         this.items = this.items.filter((t) => !t.completed)
+        if (count > 0) toast.success(`已清除 ${count} 项已完成待办`)
       } catch (e) {
         notifyError(e)
         throw e
