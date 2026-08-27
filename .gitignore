@@ -1,0 +1,26 @@
+# ---- Go 后端 ----
+bin/
+server/tmp/
+*.test
+*.out
+
+# ---- 前端 ----
+web/node_modules/
+web/dist/
+web/coverage/
+
+# ---- 数据库 ----
+data/
+*.db
+*.db-wal
+*.db-shm
+
+# ---- 环境变量 ----
+.env
+.env.local
+
+# ---- IDE / 系统 ----
+.idea/
+.vscode/
+.DS_Store
+*.log
