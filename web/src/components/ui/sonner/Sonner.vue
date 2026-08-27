@@ -1,18 +1,16 @@
 <script setup lang="ts">
 import { Toaster as Sonner } from 'vue-sonner'
+
+import { useTheme } from '@/composables/useTheme'
+
+// toast 主题跟随应用（深浅色），样式使用 vue-sonner 自带卡片样式（main.ts 已导入其 CSS）
+const { isDark } = useTheme()
 </script>
 
 <template>
   <Sonner
-    class="toaster group"
-    :toast-options="{
-      classes: {
-        toast:
-          'group toast group-[.toaster]:bg-background group-[.toaster]:text-foreground group-[.toaster]:border-border group-[.toaster]:shadow-lg',
-        description: 'group-[.toast]:text-muted-foreground',
-        actionButton: 'group-[.toast]:bg-primary group-[.toast]:text-primary-foreground',
-        cancelButton: 'group-[.toast]:bg-muted group-[.toast]:text-muted-foreground',
-      },
-    }"
+    position="top-center"
+    :theme="isDark ? 'dark' : 'light'"
+    :duration="2500"
   />
 </template>

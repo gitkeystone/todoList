@@ -41,7 +41,7 @@ onUnmounted(() => {
       <TodoList />
       <TodoFooter />
     </main>
-    <Sonner position="top-center" />
+    <Sonner />
   </div>
 </template>
 
