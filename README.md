@@ -2,6 +2,8 @@
 
 一个极简、Apple 风格的**单用户待办事项应用**（无用户系统，本地 SQLite 存储）。
 
+![](https://cdn.jsdelivr.net/gh/gitkeystone/PicGo@main/img/20260828015747718.png)
+
 - **后端**：Go + Gin + GORM + SQLite3（`glebarez/sqlite`，纯 Go 无 CGO）
 - **前端**：Vue 3 + TypeScript + Vite + Tailwind CSS + shadcn-vue
 - **工程化**：Makefile 管理生命周期；REST Client（`server/test.rest`）验证 REST API

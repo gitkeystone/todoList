@@ -17,6 +17,13 @@
 
 按照 ./spec/0002-implementation-plan.md, 在 ./todoList/ 目录下 完整实现这个项目的 M0 阶段的所有任务。
 
+完成 M1 阶段所有任务
+完成 M2 阶段所有任务
+完成 M3 阶段所有任务
+完成 M4 阶段所有任务
+
 ## Testing 测试
 帮我根据 REST Client 撰写一个 test.rest 文件，里面包含对所有支持的 API 的测试。
+
+
 
