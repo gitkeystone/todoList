@@ -1,6 +1,6 @@
 # Todo List
 
-[![CI](https://github.com/gitkeystone/todoList/actions/workflows/ci.yml/badge.svg)](https://github.com/gitkeystone/todoList/actions/workflows/ci.yml)
+[![CI](https://github.com/gitkeystone/todoList/actions/workflows/ci.yml/badge.svg?branch=main&event=push)](https://github.com/gitkeystone/todoList/actions/workflows/ci.yml)
 
 一个极简、Apple 风格的**单用户待办事项应用**（无用户系统，本地 SQLite 存储）。
 
