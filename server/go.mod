@@ -1,6 +1,6 @@
 module github.com/gitkeystone/todolist/server
 
-go 1.26.1
+go 1.24
 
 require (
 	github.com/gin-gonic/gin v1.10.0
