@@ -1,0 +1,4 @@
+allowBuilds:
+  vue-demi: true
+minimumReleaseAgeExclude:
+  - '@vue/test-utils@2.5.0'
