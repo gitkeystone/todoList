@@ -7,7 +7,7 @@ import (
 	"testing"
 	"time"
 
-	"github.com/cxh/todolist/server/internal/model"
+	"github.com/gitkeystone/todolist/server/internal/model"
 	"github.com/glebarez/sqlite"
 	"gorm.io/gorm"
 	"gorm.io/gorm/logger"

@@ -8,9 +8,9 @@ import (
 	"time"
 	"unicode/utf8"
 
-	"github.com/cxh/todolist/server/internal/apperr"
-	"github.com/cxh/todolist/server/internal/model"
-	"github.com/cxh/todolist/server/internal/repository"
+	"github.com/gitkeystone/todolist/server/internal/apperr"
+	"github.com/gitkeystone/todolist/server/internal/model"
+	"github.com/gitkeystone/todolist/server/internal/repository"
 )
 
 const (

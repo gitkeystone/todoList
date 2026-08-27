@@ -5,7 +5,7 @@ import (
 	"errors"
 	"strings"
 
-	"github.com/cxh/todolist/server/internal/model"
+	"github.com/gitkeystone/todolist/server/internal/model"
 	"gorm.io/gorm"
 )
 

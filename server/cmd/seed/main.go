@@ -7,9 +7,9 @@ import (
 	"path/filepath"
 	"time"
 
-	"github.com/cxh/todolist/server/internal/config"
-	"github.com/cxh/todolist/server/internal/model"
-	"github.com/cxh/todolist/server/internal/repository"
+	"github.com/gitkeystone/todolist/server/internal/config"
+	"github.com/gitkeystone/todolist/server/internal/model"
+	"github.com/gitkeystone/todolist/server/internal/repository"
 	"github.com/glebarez/sqlite"
 	"gorm.io/gorm"
 )

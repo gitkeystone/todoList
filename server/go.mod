@@ -1,4 +1,4 @@
-module github.com/cxh/todolist/server
+module github.com/gitkeystone/todolist/server
 
 go 1.26.1
 

@@ -8,9 +8,5 @@ const { isDark } = useTheme()
 </script>
 
 <template>
-  <Sonner
-    position="top-center"
-    :theme="isDark ? 'dark' : 'light'"
-    :duration="2500"
-  />
+  <Sonner position="top-center" :theme="isDark ? 'dark' : 'light'" :duration="2500" />
 </template>

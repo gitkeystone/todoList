@@ -6,9 +6,9 @@ import (
 	"testing"
 	"time"
 
-	"github.com/cxh/todolist/server/internal/apperr"
-	"github.com/cxh/todolist/server/internal/model"
-	"github.com/cxh/todolist/server/internal/repository"
+	"github.com/gitkeystone/todolist/server/internal/apperr"
+	"github.com/gitkeystone/todolist/server/internal/model"
+	"github.com/gitkeystone/todolist/server/internal/repository"
 )
 
 // stubRepo 内存假实现，用于纯业务逻辑单测（PRD §10.2）。

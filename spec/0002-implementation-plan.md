@@ -200,7 +200,7 @@ flowchart LR
 - **目的**：验证 Go 工具链与 Gin 集成，提供 `/healthz` 作为联调探针。
 - **涉及文件**：`server/go.mod`、`server/cmd/api/main.go`、`server/internal/config/config.go`（最小版）。
 - **关键要点**：
-  - `go mod init github.com/cxh/todolist/server`（模块路径可按实际 Git 仓库调整）；
+  - `go mod init github.com/gitkeystone/todolist/server`（模块路径与 Git 仓库保持一致）；
   - 依赖：`gin-gonic/gin`、`gorm.io/gorm`、`github.com/glebarez/sqlite`（纯 Go，规避 CGO，PRD §12 R-1）；
   - `main.go`：加载 `PORT`（默认 8080）→ 创建 gin 引擎 → 注册 `GET /healthz` 返回 `{"status":"ok"}` → `r.Run(":"+port)`；
   - `config` 用标准库 `os.Getenv` + 默认值，暂不引第三方配置库。
