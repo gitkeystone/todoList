@@ -13,6 +13,9 @@ export default defineConfigWithVueTs(
   {
     rules: {
       'vue/multi-word-component-names': 'off',
+      // 以下为纯格式化规则，与 Prettier 冲突，交由 Prettier 统一处理
+      'vue/max-attributes-per-line': 'off',
+      'vue/html-self-closing': 'off',
       '@typescript-eslint/no-explicit-any': 'warn',
     },
   },
