@@ -58,11 +58,11 @@ fmt:             ## 代码格式化（gofmt + Prettier）
 seed:            ## 注入演示数据
 	cd $(SERVER_DIR) && DB_PATH=../$(DB_PATH) go run ./cmd/seed
 
-db-reset:        ## 重置数据库（开发用）
-	rm -f $(DB_PATH)
+db-reset:        ## 重置数据库（含 WAL/SHM 残留文件，开发用）
+	rm -f $(DB_PATH) $(DB_PATH)-wal $(DB_PATH)-shm
 
 ci:              ## 本地 CI：格式/静态检查/测试/构建 全流程
 	bash scripts/ci.sh
 
-clean:           ## 清理构建产物与数据库
-	rm -rf bin web/dist $(DB_PATH)
+clean:           ## 清理构建产物与数据库（含 WAL/SHM 残留）
+	rm -rf bin web/dist $(DB_PATH) $(DB_PATH)-wal $(DB_PATH)-shm
