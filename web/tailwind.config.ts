@@ -1,6 +1,6 @@
 import type { Config } from 'tailwindcss'
 
-// Tailwind 配置（M0：shadcn-vue 令牌映射 + 应用外壳令牌；M2 起扩展 Apple 设计令牌，PRD §4.2）
+// Tailwind 配置：Apple 设计令牌（PRD §4.2）+ shadcn-vue 兼容层
 export default {
   darkMode: 'class',
   content: ['./index.html', './src/**/*.{vue,js,ts,jsx,tsx}'],
@@ -40,14 +40,58 @@ export default {
           DEFAULT: 'hsl(var(--card))',
           foreground: 'hsl(var(--card-foreground))',
         },
-        /* 应用外壳令牌（Apple 风格） */
+        success: 'hsl(var(--success))',
+
+        /* Apple 应用外壳令牌 */
         surface: 'var(--bg)',
+        elevated: 'var(--bg-elevated)',
         ink: 'var(--text-primary)',
+        'ink-secondary': 'var(--text-secondary)',
+        'ink-tertiary': 'var(--text-tertiary)',
+        line: 'var(--line)',
+        frosted: 'var(--frosted)',
       },
       borderRadius: {
         lg: 'var(--radius)',
         md: 'calc(var(--radius) - 2px)',
         sm: 'calc(var(--radius) - 4px)',
+        '2xl': '1rem',
+        '3xl': '1.5rem',
+      },
+      boxShadow: {
+        card: '0 4px 16px rgba(0, 0, 0, 0.06)',
+        'card-hover': '0 8px 24px rgba(0, 0, 0, 0.1)',
+      },
+      fontFamily: {
+        sans: [
+          '-apple-system',
+          'BlinkMacSystemFont',
+          'SF Pro Display',
+          'SF Pro Text',
+          'PingFang SC',
+          'Helvetica Neue',
+          'Microsoft YaHei',
+          'sans-serif',
+        ],
+      },
+      letterSpacing: {
+        tight: '-0.02em',
+        tighter: '-0.03em',
+      },
+      keyframes: {
+        'fade-in-up': {
+          '0%': { opacity: '0', transform: 'translateY(8px)' },
+          '100%': { opacity: '1', transform: 'translateY(0)' },
+        },
+        shake: {
+          '0%, 100%': { transform: 'translateX(0)' },
+          '25%': { transform: 'translateX(-6px)' },
+          '75%': { transform: 'translateX(6px)' },
+        },
+      },
+      animation: {
+        'fade-in-up': 'fade-in-up 0.3s cubic-bezier(0.32, 0.72, 0, 1) both',
+        shake: 'shake 0.3s ease',
       },
     },
   },

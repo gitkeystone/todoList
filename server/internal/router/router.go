@@ -2,7 +2,11 @@
 package router
 
 import (
+	"log"
 	"net/http"
+	"os"
+	"path/filepath"
+	"strings"
 
 	"github.com/cxh/todolist/server/internal/handler"
 	"github.com/cxh/todolist/server/internal/middleware"
@@ -27,4 +31,25 @@ func Setup(r *gin.Engine, h *handler.TodoHandler, allowedOrigins []string) {
 	g.GET("/todos/:id", h.Get)
 	g.PATCH("/todos/:id", h.Patch)
 	g.DELETE("/todos/:id", h.Delete)
+}
+
+// ServeFrontend 托管前端构建产物（PRD §5.1 单进程部署）。
+// dist 缺失时仅记录日志，不影响 API 服务。
+func ServeFrontend(r *gin.Engine, webDist string) {
+	dist := filepath.Clean(webDist)
+	if _, err := os.Stat(filepath.Join(dist, "index.html")); err != nil {
+		log.Printf("web dist not found at %s, skip static serving", dist)
+		return
+	}
+	r.Static("/assets", filepath.Join(dist, "assets"))
+	r.StaticFile("/favicon.svg", filepath.Join(dist, "favicon.svg"))
+	r.StaticFile("/icons.svg", filepath.Join(dist, "icons.svg"))
+	// SPA 回退：非 API 的 GET 请求返回 index.html（前端为单页应用，无路由）
+	r.NoRoute(func(c *gin.Context) {
+		if c.Request.Method == http.MethodGet && !strings.HasPrefix(c.Request.URL.Path, "/api/") {
+			c.File(filepath.Join(dist, "index.html"))
+			return
+		}
+		c.Status(http.StatusNotFound)
+	})
 }

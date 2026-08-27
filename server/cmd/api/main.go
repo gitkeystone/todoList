@@ -42,6 +42,10 @@ func main() {
 
 	r := gin.New()
 	router.Setup(r, h, cfg.AllowedOrigins)
+	// 生产模式：单进程托管前端构建产物（PRD §5.1）
+	if cfg.GinMode == gin.ReleaseMode {
+		router.ServeFrontend(r, cfg.WebDist)
+	}
 
 	srv := &http.Server{
 		Addr:    ":" + cfg.Port,

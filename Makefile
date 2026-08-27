@@ -9,6 +9,7 @@ WEB_DIR     := web
 BIN         := bin/todolist-server
 PORT        ?= 8080
 DB_PATH     ?= data/todolist.db
+WEB_DIST    ?= web/dist
 
 .PHONY: help setup dev dev-api dev-web build run test test-web test-api lint fmt seed db-reset clean
 
@@ -34,7 +35,7 @@ build:           ## 构建前后端产物
 	cd $(WEB_DIR) && pnpm build
 
 run:             ## 生产模式运行（先 build；后端托管 web/dist）
-	cd $(SERVER_DIR) && GIN_MODE=release DB_PATH=../$(DB_PATH) ../$(BIN)
+	cd $(SERVER_DIR) && GIN_MODE=release DB_PATH=../$(DB_PATH) WEB_DIST=../$(WEB_DIST) ../$(BIN)
 
 test:            ## 后端单元测试（含覆盖率）
 	cd $(SERVER_DIR) && go test ./... -cover

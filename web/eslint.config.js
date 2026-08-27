@@ -16,6 +16,8 @@ export default defineConfigWithVueTs(
       // 以下为纯格式化规则，与 Prettier 冲突，交由 Prettier 统一处理
       'vue/max-attributes-per-line': 'off',
       'vue/html-self-closing': 'off',
+      'vue/singleline-html-element-content-newline': 'off',
+      'vue/multiline-html-element-content-newline': 'off',
       '@typescript-eslint/no-explicit-any': 'warn',
     },
   },
