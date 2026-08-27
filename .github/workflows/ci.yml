@@ -42,7 +42,8 @@ jobs:
 
       - uses: golangci/golangci-lint-action@v9
         with:
-          version: v1.64.8
+          # golangci-lint-action >= v7 仅支持 v2 系；v2.13 支持 Go 1.26
+          version: v2.13.1
           working-directory: server
 
       - name: 单元/集成测试（含覆盖率）
